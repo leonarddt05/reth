@@ -362,7 +362,7 @@ where
                         &mut all_logs,
                         &filter,
                         (block_hash, block.number).into(),
-                        block.body.into_iter().map(|tx| tx.hash()).zip(receipts),
+                        block.body.into_iter().map(|tx| tx.hash()).zip(receipts.iter()),
                         false,
                     );
                 }
@@ -409,7 +409,7 @@ where
     async fn block_and_receipts_by_number(
         &self,
         hash_or_number: BlockHashOrNumber,
-    ) -> EthResult<Option<(SealedBlock, Vec<Receipt>)>> {
+    ) -> EthResult<Option<(SealedBlock, Arc<Vec<Receipt>>)>> {
         let block_hash = match self.provider.convert_block_hash(hash_or_number)? {
             Some(hash) => hash,
             None => return Ok(None),
